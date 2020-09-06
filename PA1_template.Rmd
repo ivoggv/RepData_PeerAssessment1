@@ -8,6 +8,14 @@ output:
 
 ## Loading and preprocessing the data
 
+File must be in your working directory. For this example we haven't unzip it, but you may use the csv file directly. 
+
+```{r}
+library(readr)
+data=read_csv(file = "activity.zip")
+str(data)
+
+```
 
 
 ## What is mean total number of steps taken per day?
