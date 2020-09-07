@@ -45,6 +45,18 @@ hist(total_steps$steps_per_day,col = "blue",xlab = "Steps per Day",main = "Histo
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
+```r
+png('./instructions_fig/first_histogram.png',width=500,height=300,units="px")
+hist(total_steps$steps_per_day,col = "blue",xlab = "Steps per Day",main = "Histogram")
+
+dev.off()
+```
+
+```
+## png 
+##   2
+```
+
 
 
 ```r
@@ -77,6 +89,8 @@ maximo=data %>%
 ```
 The interval with the maximum number of steps on average is **835** with **206.1698113** steps.  
 
+
+
 ## Imputing missing values
 
 ```r
@@ -105,12 +119,13 @@ newtotal=newdf %>% group_by(date) %>% summarise(steps_per_day=sum(steps,na.rm = 
 hist(newtotal$steps_per_day,col = "blue",xlab = "Steps per Day",main = "Histogram")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ```r
 newmeansteps=format(mean(newtotal$steps_per_day,na.rm = TRUE),digits=2)
 newmediansteps=format(median(newtotal$steps_per_day,na.rm = TRUE),digits=2)
 ```
+
 
 The **new mean** total number of steps taken per day **10766** in contrast with the previous amount of **9354** .  
 
@@ -131,5 +146,5 @@ newdf$week[grep(x=newdf$day,pattern = "^S")]="Weekend"
 newdf %>% group_by(week,interval) %>% summarize(steps=mean(steps)) %>%  ggplot(aes(interval,steps)) + geom_line(aes(color=week),show.legend = FALSE) + facet_grid(.~week)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 

@@ -31,6 +31,10 @@ total_steps=data %>% group_by(date) %>% summarise(steps_per_day=sum(steps,na.rm 
 
 hist(total_steps$steps_per_day,col = "blue",xlab = "Steps per Day",main = "Histogram")
 
+png('./instructions_fig/first_histogram.png',width=500,height=300,units="px")
+hist(total_steps$steps_per_day,col = "blue",xlab = "Steps per Day",main = "Histogram")
+
+dev.off()
 
 ```
 
@@ -62,6 +66,18 @@ maximo=data %>%
 ```
 The interval with the maximum number of steps on average is **`r maximo$interval`** with **`r maximo$steps`** steps.  
 
+```{r include=FALSE}
+png('./instructions_fig/line_plot.png',width=500,height=300,units="px")
+data %>% 
+  group_by(interval) %>% 
+  summarise(steps=mean(steps,na.rm = TRUE)) %>%  ggplot(aes(x = interval,y=steps))+
+    geom_line() + 
+    geom_hline(aes(yintercept = mean(data$steps,na.rm=TRUE),linetype="Average"),color="blue",show.legend = TRUE)
+
+dev.off()
+
+```
+
 ## Imputing missing values
 ```{r}
 #Calculate the number of missing values
@@ -85,6 +101,12 @@ hist(newtotal$steps_per_day,col = "blue",xlab = "Steps per Day",main = "Histogra
 newmeansteps=format(mean(newtotal$steps_per_day,na.rm = TRUE),digits=2)
 newmediansteps=format(median(newtotal$steps_per_day,na.rm = TRUE),digits=2)
 ```
+```{r include=FALSE}
+png('./instructions_fig/second_histogram.png',width=500,height=300,units="px")
+hist(newtotal$steps_per_day,col = "blue",xlab = "Steps per Day",main = "Histogram")
+
+dev.off()
+```
 
 The **new mean** total number of steps taken per day **`r newmeansteps`** in contrast with the previous amount of **`r meansteps`** .  
 
@@ -104,5 +126,20 @@ newdf$week[grep(x=newdf$day,pattern = "^S")]="Weekend"
 newdf %>% group_by(week,interval) %>% summarize(steps=mean(steps)) %>%  ggplot(aes(interval,steps)) + geom_line(aes(color=week),show.legend = FALSE) + facet_grid(.~week)
 
 
-```
 
+```
+It appears to be a diffence. Specially around de interval at 800 (presummably 8 am), where the person is more active during the weekday. This makes sense since you would assume he is moving to work. 
+
+```{r include=FALSE}
+newdf=newdf %>% mutate(day=weekdays(date)) 
+
+newdf$week=c("Weekday")
+newdf$week[grep(x=newdf$day,pattern = "^S")]="Weekend"
+
+png('./instructions_fig/weekendcomparison.png',width=500,height=300,units="px")
+
+newdf %>% group_by(week,interval) %>% summarize(steps=mean(steps)) %>%  ggplot(aes(interval,steps)) + geom_line(aes(color=week),show.legend = FALSE) + facet_grid(.~week)
+
+dev.off()
+
+```
