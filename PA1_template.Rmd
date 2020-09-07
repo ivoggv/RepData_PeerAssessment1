@@ -143,3 +143,17 @@ newdf %>% group_by(week,interval) %>% summarize(steps=mean(steps)) %>%  ggplot(a
 dev.off()
 
 ```
+
+```{r}
+library(plotly)
+newdf=newdf %>% mutate(day=weekdays(date)) 
+
+newdf$week=c("Weekday")
+newdf$week[grep(x=newdf$day,pattern = "^S")]="Weekend"
+
+plot=newdf %>% group_by(week,interval) %>% summarize(steps=mean(steps)) %>%  ggplot(aes(interval,steps)) + geom_line(aes(color=week),show.legend = FALSE) + facet_grid(.~week)
+
+ggplotly(plot)
+
+```
+
